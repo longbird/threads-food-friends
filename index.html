@@ -266,8 +266,13 @@ function openInfo(s){
   box.className = 'kpop';
   box.innerHTML = '<button type="button" class="kpop-x" aria-label="닫기">×</button>' + popupHTML(s);
   box.querySelector('.kpop-x').addEventListener('click', function(e){ e.stopPropagation(); closeInfo(); });
+  ['mousedown','touchstart','touchend','pointerdown','click','dblclick'].forEach(function(ev){
+    box.addEventListener(ev, function(e){ e.stopPropagation(); }, {passive:true});
+  });
+  var link = box.querySelector('.pop-naver');
+  if(link){ link.addEventListener('click', function(e){ e.stopPropagation(); e.preventDefault(); var w = window.open(link.href, '_blank', 'noopener'); if(!w){ location.href = link.href; } }); }
   infoOverlay = new kakao.maps.CustomOverlay({
-    position: new kakao.maps.LatLng(s._dlat, s._dlng), content: box, yAnchor: 1.15, zIndex: 10
+    position: new kakao.maps.LatLng(s._dlat, s._dlng), content: box, yAnchor: 1.15, zIndex: 10, clickable: true
   });
   infoOverlay.setMap(map);
 }
