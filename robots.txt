@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://longbird.github.io/threads-food-friends/sitemap.xml
