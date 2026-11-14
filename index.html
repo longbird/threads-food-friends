@@ -165,7 +165,7 @@
 <main class="layout">
   <section class="mapwrap" aria-label="가게 지도">
     <div id="map"></div>
-    <div class="mapnote">핀을 누르면 가게 정보와 네이버 지도 링크가 열립니다. 지도 타일은 Esri World Street Map을 사용합니다.</div>
+    <div class="mapnote">핀을 누르면 가게 정보와 네이버 지도 링크가 열립니다. 지도 타일은 OpenStreetMap을 사용합니다.</div>
   </section>
   <section class="listcol" aria-label="가게 목록">
     <p class="result-line" id="resultLine"></p>
@@ -271,8 +271,8 @@ function initMap(){
     return;
   }
   map = L.map('map', {scrollWheelZoom:true});
-  esriLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 19, attribution: '© Esri'
+  esriLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   });
   esriLayer.addTo(map);
   activeTileLayer = esriLayer;
