@@ -287,6 +287,7 @@ function initMap(){
     markers[s._id] = m;
     m.addTo(map);
     m.on('click', function(){
+      if(map.getZoom() < 15){ map.setView([s._dlat, s._dlng], 17, {animate:false}); setTimeout(function(){ m.openPopup(); }, 150); }
       document.querySelectorAll('.card.active').forEach(function(c){ c.classList.remove('active'); });
       var card = document.getElementById('card-' + s._id);
       if(card){
@@ -367,11 +368,20 @@ function regionRank(r){
 }
 
 function focusShop(s, openPopup){
+  var ZOOM = 17;
   if(HAS_MAP && map){
-    map.flyTo([s._dlat, s._dlng], Math.max(map.getZoom(), 14), {duration: 0.7});
-    if(openPopup && markers[s._id]){
-      setTimeout(function(){ markers[s._id].openPopup(); }, 500);
-    }
+    var go = function(){
+      map.invalidateSize();
+      map.closePopup();
+      map.setView([s._dlat, s._dlng], ZOOM, {animate:false});
+      if(activeTileLayer && activeTileLayer.redraw) activeTileLayer.redraw();
+      if(openPopup && markers[s._id]){
+        setTimeout(function(){ markers[s._id].openPopup(); }, 150);
+      }
+    };
+    go();
+    /* 모바일에서 지도까지 스크롤된 뒤 한 번 더 맞춘다 */
+    setTimeout(go, 450);
   }
   document.querySelectorAll('.card.active').forEach(function(c){ c.classList.remove('active'); });
   var card = document.getElementById('card-' + s._id);
@@ -424,10 +434,10 @@ function render(){
     card.addEventListener('click', function(){
       var s = SHOPS.filter(function(x){ return x._id === card.dataset.id; })[0];
       if(s){
-        focusShop(s, true);
         if(window.innerWidth <= 860){
-          document.querySelector('.mapwrap').scrollIntoView({behavior:'smooth', block:'start'});
+          document.querySelector('.mapwrap').scrollIntoView({behavior:'auto', block:'start'});
         }
+        focusShop(s, true);
       }
     });
   });
